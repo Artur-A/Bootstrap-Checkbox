@@ -1,0 +1,88 @@
+@original-checkbox-size: 14px;
+@original-checkbox-border-width: 1px;
+@large-checkbox-size: 26px;
+@large-checkbox-border-width: 2px;
+
+.checkbox-size-mixin(@checkbox-size, @checkbox-border-width) {
+    width: @checkbox-size;
+    height: @checkbox-size;
+    border: @checkbox-border-width solid;
+    border-radius: round(@checkbox-border-width * 2.5);
+    /*checkbox border color*/
+    border-color: #737373;
+}
+
+.checkbox-arrow-size-position-mixin(@checkbox-size, @checkbox-border-width) {
+    width: round(@checkbox-size/3);
+    height: round(@checkbox-size/2)+2;
+
+    /*checkmark arrow color*/
+    border: solid white;
+    border-width: 0 @checkbox-border-width+1 @checkbox-border-width+1 0;
+}
+
+
+
+:root {
+    label.checkbox-bootstrap {
+        input[type=checkbox] {
+            /* hide original check box */
+            opacity: 0;
+            position: absolute;
+
+            /* find the nearest span with checkbox-placeholder class and draw custom checkbox */
+            + span.checkbox-placeholder {
+                .checkbox-size-mixin(@original-checkbox-size, @original-checkbox-border-width);
+                display: inline-block;
+                cursor: pointer;
+                margin: 0 7px 0 -20px;
+                vertical-align: middle;
+                text-align:center;
+            }
+
+            &:checked + span.checkbox-placeholder {
+                background: #0ccce4;
+            }
+            /* draw checkmark before the span placeholder when original hidden input is checked */
+            &:checked + span.checkbox-placeholder:before {
+                display: inline-block;
+                position: relative;
+                vertical-align: text-top;
+                .checkbox-arrow-size-position-mixin(@original-checkbox-size, @original-checkbox-border-width);
+                /*can be done with post css autoprefixer*/
+                 -webkit-transform: rotate(45deg);
+                     -moz-transform: rotate(45deg);
+                      -ms-transform: rotate(45deg);
+                       -o-transform: rotate(45deg);
+                transform: rotate(45deg);
+                content: "";
+            }
+            /* disabled checkbox style */
+            &:disabled + span.checkbox-placeholder {
+                background: #ececec;
+                border-color: #c3c2c2;
+            }
+            /* disabled and checked checkbox style */
+            &:checked:disabled + span.checkbox-placeholder {
+                background: #d6d6d6;
+                border-color: #bdbdbd;
+            }
+            /* when the checkbox is focused with tab key show dots arround */
+            &:focus:not(:hover) + span.checkbox-placeholder {
+                outline: 1px dotted black;
+            }
+        }
+    }
+    /* larger checkbox */
+    label.checkbox-bootstrap.checkbox-lg {
+        input[type=checkbox] {
+            + span.checkbox-placeholder {
+                .checkbox-size-mixin(@large-checkbox-size, @large-checkbox-border-width);
+            }
+
+            &:checked + span.checkbox-placeholder:before {
+                .checkbox-arrow-size-position-mixin(@large-checkbox-size, @large-checkbox-border-width);
+            }
+        }
+    }
+}
